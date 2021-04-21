@@ -42,7 +42,7 @@ export default Vue.extend({
 			return (
 				ago >= 31536000 ? this.$t('@.time.years_ago')  .replace('{a}', (~~(ago / 31536000)).toString()).replace('{b}', (~~(ago / 2592000 % 12)).toString()) :
 				ago >= 2592000  ? this.$t('@.time.months_ago') .replace('{a}', (~~(ago / 2592000)).toString()).replace('{b}', (~~(ago / 86400 % 30)).toString()) :
-				ago >= 604800   ? this.$t('@.time.weeks_ago')  .replace('{a}', (~~(ago / 604800)).toString()).replace('{b}', (~~(ago / 86400 % 30)).toString()) :
+				ago >= 604800   ? this.$t('@.time.weeks_ago')  .replace('{a}', (~~(ago / 604800)).toString()).replace('{b}', (~~(ago / 86400 % 7)).toString()) :
 				ago >= 86400    ? this.$t('@.time.days_ago')   .replace('{a}', (~~(ago / 86400)).toString()).replace('{b}', (~~(ago / 3600 % 24)).toString()) :
 				ago >= 3600     ? this.$t('@.time.hours_ago')  .replace('{a}', (~~(ago / 3600)).toString()).replace('{b}', (~~(ago / 60 % 60)).toString()) :
 				ago >= 60       ? this.$t('@.time.minutes_ago').replace('{a}', (~~(ago / 60)).toString()).replace('{b}', (~~(ago % 60)).toString()) :
