@@ -105,7 +105,7 @@ import noteMixin from '../../../common/scripts/note-mixin';
 import noteSubscriber from '../../../common/scripts/note-subscriber';
 import XInstanceInfo from '../../../common/views/components/instance-info.vue';
 import { faLaugh } from '@fortawesome/free-regular-svg-icons';
-
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 export default Vue.extend({
 	i18n: i18n('mobile/views/components/note.vue'),
 	components: {
@@ -145,7 +145,7 @@ export default Vue.extend({
 
 	data() {
 		return {
-			faLaugh,
+			faLaugh, faPlusCircle,
 			conversation: [],
 			replies: []
 		};

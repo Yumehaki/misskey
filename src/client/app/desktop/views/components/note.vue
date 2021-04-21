@@ -109,11 +109,12 @@
 <script lang="ts">
 import Vue from 'vue';
 import i18n from '../../../i18n';
-
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import XSub from './note.sub.vue';
 import noteMixin from '../../../common/scripts/note-mixin';
 import noteSubscriber from '../../../common/scripts/note-subscriber';
 import { faClock, faLaugh } from '@fortawesome/free-regular-svg-icons';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import XInstanceInfo from '../../../common/views/components/instance-info.vue';
 import XVisibilityIcon from '../../../common/views/components/visibility-icon.vue';
 
@@ -166,7 +167,7 @@ export default Vue.extend({
 
 	data() {
 		return {
-			faClock, faLaugh,
+			faClock, faLaugh, faPlusCircle,
 			conversation: [],
 			replies: []
 		};

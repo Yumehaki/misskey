@@ -1,11 +1,11 @@
 {
 	"name": "misskey",
-	"author": "mei23 <m@m544.net>",
-	"version": "10.102.450-m544",
-	"codename": "m544",
+	"author": "Yumehaki <aneqt@yumehaki.com>",
+	"version": "10.102.450-ypjf",
+	"codename": "ypjf",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/mei23/misskey.git"
+		"url": "https://github.com/Yumehaki/misskey.git"
 	},
 	"main": "./index.js",
 	"private": true,
@@ -52,6 +52,7 @@
 		"@types/jsdom": "16.2.10",
 		"@types/jsonld": "1.5.5",
 		"@types/koa": "2.0.49",
+		"@types/katex": "0.11.0",
 		"@types/koa-bodyparser": "4.3.0",
 		"@types/koa-favicon": "2.0.19",
 		"@types/koa-logger": "3.1.1",
@@ -143,6 +144,7 @@
 		"json5": "2.2.0",
 		"json5-loader": "4.0.1",
 		"jsonld": "5.2.0",
+		"katex": "0.13.2",
 		"koa": "2.13.1",
 		"koa-bodyparser": "4.3.0",
 		"koa-favicon": "2.1.0",

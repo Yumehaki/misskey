@@ -1081,6 +1081,25 @@ describe('parse', () => {
 				]);
 			});
 		});
+		it('mathInline', () => {
+			const fomula = 'x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}';
+			const content = `\\(${fomula}\\)`;
+			const tokens = parseFull(content);
+			assert.deepStrictEqual(tokens, [
+				leaf('mathInline', { formula: fomula })
+			]);
+		});
+
+		describe('mathBlock', () => {
+			it('simple', () => {
+				const fomula = 'x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}';
+				const content = `\\[\n${fomula}\n\\]`;
+				const tokens = parseFull(content);
+				assert.deepStrictEqual(tokens, [
+					leaf('mathBlock', { formula: fomula })
+				]);
+			});
+		});
 
 		it('search', () => {
 			const tokens1 = parseFull('a b c 検索');

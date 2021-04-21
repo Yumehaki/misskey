@@ -39,6 +39,7 @@ export const mfmLanguage = P.createLanguage({
 		r.quote,
 		r.search,
 		r.blockCode,
+		r.mathBlock,
 		r.center,
 		r.marquee,
 		r.color,
@@ -59,10 +60,12 @@ export const mfmLanguage = P.createLanguage({
 		r.vflip,
 		r.rotate,
 		r.inlineCode,
+		r.mathInline,
 		r.mention,
 		r.hashtag,
 		r.url,
 		r.link,
+		r.fn,
 		r.emoji,
 
 		// 装飾はここに追加
@@ -243,6 +246,8 @@ export const mfmLanguage = P.createLanguage({
 
 	center: r => r.startOfLine.then(P.regexp(/<center>([\s\S]+?)<\/center>/, 1).map(x => createMfmNode('center', {}, r.inline.atLeast(1).tryParse(x)))),
 	inlineCode: () => P.regexp(/`([^´\n]+?)`/, 1).map(x => createMfmNode('inlineCode', { code: x })),
+	mathBlock: r => r.startOfLine.then(P.regexp(/\\\[([\s\S]+?)\\\]/, 1).map(x => createMfmNode('mathBlock', { formula: x.trim() }))),
+	mathInline: () => P.regexp(/\\\((.+?)\\\)/, 1).map(x => createMfmNode('mathInline', { formula: x })),
 	mention: () => {
 		return P((input, i) => {
 			const text = input.substr(i);
@@ -315,6 +320,30 @@ export const mfmLanguage = P.createLanguage({
 		const lcode = P.regexp(localEmojiRegex).map(x => createMfmNode('emoji', { emoji: x, local: true }));
 		const code = P.regexp(emojiRegex).map(x => createMfmNode('emoji', { emoji: x }));
 		return P.alt(name, lcode, vcode, code);
+	},
+	fn: r => {
+		return P.seqObj(
+			P.string('['), ['fn', P.regexp(/[^\s\n\[\]]+/)] as any, P.string(' '), P.optWhitespace, ['text', P.regexp(/[^\n\[\]]+/)] as any, P.string(']'),
+		).map((x: any) => {
+			let name = x.fn;
+			const args = {} as any;
+			const separator = x.fn.indexOf('.');
+			if (separator > -1) {
+				name = x.fn.substr(0, separator);
+				for (const arg of x.fn.substr(separator + 1).split(',')) {
+					const kv = arg.split('=');
+					if (kv.length === 1) {
+						args[kv[0]] = true;
+					} else {
+						args[kv[0]] = kv[1];
+					}
+				}
+			}
+			return createMfmNode('fn', {
+				name,
+				args
+			}, r.inline.atLeast(1).tryParse(x.text));
+		});
 	},
 	text: () => P.any.map(x => createMfmNode('text', { text: x }))
 });

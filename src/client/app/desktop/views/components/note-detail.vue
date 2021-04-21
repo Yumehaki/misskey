@@ -100,6 +100,7 @@ import XSub from './note.sub.vue';
 import noteSubscriber from '../../../common/scripts/note-subscriber';
 import noteMixin from '../../../common/scripts/note-mixin';
 import { faClock, faLaugh } from '@fortawesome/free-regular-svg-icons';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import XVisibilityIcon from '../../../common/views/components/visibility-icon.vue';
 import XInstanceInfo from '../../../common/views/components/instance-info.vue';
 
@@ -126,7 +127,7 @@ export default Vue.extend({
 
 	data() {
 		return {
-			faClock, faLaugh,
+			faClock, faLaugh, faPlusCircle,
 			conversation: [],
 			conversationFetching: false,
 			replies: []

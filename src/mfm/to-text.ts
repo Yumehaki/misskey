@@ -12,6 +12,10 @@ function visit(node: MfmNode): string {
 		case 'codeInline': {
 			return [node.props.lang, node.props.code].filter(check).join(' ');
 		}
+		case 'mathBlock':
+		case 'mathInline': {
+			return node.props.formula;
+		}
 
 		/*
 		case 'mention': {
