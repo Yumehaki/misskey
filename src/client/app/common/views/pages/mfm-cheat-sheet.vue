@@ -195,7 +195,6 @@
 		<p><mfm :text="preview_search" :key="preview_search"/></p>
 		<ui-textarea :slim="true" class="text" v-model="preview_search"></ui-textarea>
 	</section>
-</ui-card>
 
 	<section>
 		<header>fn系アニメーション</header>
@@ -248,6 +247,7 @@
 		<p><mfm :text="preview_font" :key="preview_font"/></p>
 		<ui-textarea :slim="true" class="text" v-model="preview_font"></ui-textarea>
 	</section>
+</ui-card>
 </template>
 
 <script lang="ts">
