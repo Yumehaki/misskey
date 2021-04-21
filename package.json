@@ -1,7 +1,7 @@
 {
 	"name": "misskey",
 	"author": "Yumehaki <aneqt@yumehaki.com>",
-	"version": "10.102.454-ypjf",
+	"version": "10.102.455-ypjf",
 	"codename": "ypjf",
 	"repository": {
 		"type": "git",
