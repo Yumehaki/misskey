@@ -75,6 +75,12 @@ export const mfmLanguage = P.createLanguage({
 		r.sup,
 		r.sub,
 		r.rgbshift,
+		r.x2,
+		r.x3,
+		r.x4,
+		r.x5,
+		r.x6,
+		r.fn,
 
 		r.text
 	),
@@ -242,6 +248,11 @@ export const mfmLanguage = P.createLanguage({
 	shake: r => P.regexp(/<shake>(.+?)<\/shake>/, 1).map(x => createMfmNode('shake', {}, r.inline.atLeast(1).tryParse(x))),
 	sup: r => P.regexp(/<sup>(.+?)<\/sup>/, 1).map(x => createMfmNode('sup', {}, r.inline.atLeast(1).tryParse(x))),
 	sub: r => P.regexp(/<sub>(.+?)<\/sub>/, 1).map(x => createMfmNode('sub', {}, r.inline.atLeast(1).tryParse(x))),
+	x2: r => P.regexp(/<x2>(.+?)<\/x2>/, 1).map(x => createMfmNode('x2', {}, r.inline.atLeast(1).tryParse(x))),
+	x3: r => P.regexp(/<x3>(.+?)<\/x3>/, 1).map(x => createMfmNode('x3', {}, r.inline.atLeast(1).tryParse(x))),
+	x4: r => P.regexp(/<x4>(.+?)<\/x4>/, 1).map(x => createMfmNode('x4', {}, r.inline.atLeast(1).tryParse(x))),
+	x5: r => P.regexp(/<x5>(.+?)<\/x5>/, 1).map(x => createMfmNode('x5', {}, r.inline.atLeast(1).tryParse(x))),
+	x6: r => P.regexp(/<x6>(.+?)<\/x6>/, 1).map(x => createMfmNode('x6', {}, r.inline.atLeast(1).tryParse(x))),
 	rgbshift: r => P.regexp(/<rgbshift>(.+?)<\/rgbshift>/, 1).map(x => createMfmNode('rgbshift', {}, r.inline.atLeast(1).tryParse(x))),
 
 	center: r => r.startOfLine.then(P.regexp(/<center>([\s\S]+?)<\/center>/, 1).map(x => createMfmNode('center', {}, r.inline.atLeast(1).tryParse(x)))),

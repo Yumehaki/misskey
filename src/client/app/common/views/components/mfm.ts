@@ -381,6 +381,35 @@ case 'fn': {
 						style: !this.$store.state.settings.disableAnimatedMfm ? 'animation: mfm-rgbshift 2s linear infinite;' : ''
 					}, genEl(node.children));
 				}
+				case 'x2': {
+					return (createElement as any)('span', {
+						style: `font-size: 200%;`
+					}, genEl(node.children));
+				}
+
+				case 'x3': {
+					return (createElement as any)('span', {
+						style: `font-size: 300%;`
+					}, genEl(node.children));
+				}
+
+				case 'x4': {
+					return (createElement as any)('span', {
+						style: `font-size: 400%;`
+					}, genEl(node.children));
+				}
+
+				case 'x5': {
+					return (createElement as any)('span', {
+						style: `font-size: 500%;`
+					}, genEl(node.children));
+				}
+
+				case 'x6': {
+					return (createElement as any)('span', {
+						style: `font-size: 600%;`
+					}, genEl(node.children));
+				}
 
 				case 'url': {
 					return [createElement(MkUrl, {
