@@ -104,8 +104,8 @@ const angleDb: MfmDef[] = [
 	{ name: 'x2', head: '<x2>', tail: '</x2>', desc: '<x2>🍮</x2>' },
 	{ name: 'x3', head: '<x3>', tail: '</x3>', desc: '<x3>🍮</x3>' },
 	{ name: 'x4', head: '<x4>', tail: '</x4>', desc: '<x4>🍮</x4>' },
-	{ name: 'x5', head: '<x4>', tail: '</x5>', desc: '<x4>🍮</x5>' },
-	{ name: 'x6', head: '<x4>', tail: '</x6>', desc: '<x4>🍮</x6>' },
+	{ name: 'x5', head: '<x5>', tail: '</x5>', desc: '<x5>🍮</x5>' },
+	{ name: 'x6', head: '<x6>', tail: '</x6>', desc: '<x6>🍮</x6>' },
 
 	{ name: 'color', head: '<color red blue>', tail: '</color>' },
 
