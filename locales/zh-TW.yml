@@ -22,6 +22,13 @@ common:
   time:
     future: "未來"
     just_now: "剛剛"
+    seconds_ago: "{}秒前"
+    minutes_ago: "{a}分鐘{b}秒前"
+    hours_ago: "{a}小時{b}分鐘前"
+    days_ago: "{a}天{b}小時前"
+    weeks_ago: "{a}週{b}天前"
+    months_ago: "{a}個月{b}天前"
+    years_ago: "{a}年{b}個月前"
   drive: "雲端硬碟"
   weekday:
     sunday: "週日"
