@@ -157,7 +157,7 @@ type IGroupBase = {
 	}[];
 };
 
-export interface ILocalUser extends IGroupBase {
+export interface ILocalGroup extends IGroupBase {
 	host: null;
 	keypair: string;
 	email: string;
@@ -210,7 +210,7 @@ export function getPushNotificationsValue(pushNotifications: Record<string, bool
 	return value;
 }
 
-export interface IRemoteUser extends IGroupBase {
+export interface IRemoteGroup extends IGroupBase {
 	host: string;
 	inbox: string;
 	sharedInbox?: string;
@@ -228,12 +228,12 @@ export interface IRemoteUser extends IGroupBase {
 	isModerator: false;
 }
 
-export type IGroup = ILocalUser | IRemoteUser;
+export type IGroup = ILocalGroup | IRemoteGroup;
 
-export const isLocalUser = (group: any): group is ILocalUser =>
+export const isLocalUser = (group: any): group is ILocalGroup =>
 	group.host === null;
 
-export const isRemoteUser = (group: any): group is IRemoteUser =>
+export const isRemoteUser = (group: any): group is ILocalGroup =>
 	!isLocalUser(group);
 
 //#region Validators
@@ -553,7 +553,7 @@ export async function pack(
 	return packed;
 }
 
-export async function fetchProxyAccount(): Promise<ILocalUser> {
+export async function fetchProxyAccount(): Promise<ILocalGroup> {
 	const meta = await fetchMeta();
-	return await Group.findOne({ username: meta.proxyAccount, host: null }) as ILocalUser;
+	return await Group.findOne({ username: meta.proxyAccount, host: null }) as ILocalGroup;
 }
