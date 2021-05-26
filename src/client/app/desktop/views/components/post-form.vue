@@ -226,6 +226,9 @@ export default Vue.extend({
 					this.quoteId = init.renote ? init.renote.id : null;
 					if (!this.renote) this.renote = this.initialNote.renote;
 				}
+				if (!this.text && this.$route?.params?.tag) {
+					this.text = `#${this.$route.params.tag} `;
+				}
 
 				this.focus();
 
