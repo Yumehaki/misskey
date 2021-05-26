@@ -79,12 +79,14 @@ class Autocomplete {
 		const text = this.text.substr(0, caretPos).split('\n').pop();
 
 		const mentionIndex = text.lastIndexOf('@');
+		const GroupMentionIndex = text.lastIndexOf('$');//将来、グループ対応の予定[TODO]
 		const hashtagIndex = text.lastIndexOf('#');
 		const emojiIndex = text.lastIndexOf(':');
 		const angleIndex = text.lastIndexOf('<');
 		const fnIndex = text.lastIndexOf('[');
 		const max = Math.max(
 			mentionIndex,
+			GroupMentionIndex,//将来、グループ対応の予定[TODO]
 			hashtagIndex,
 			emojiIndex,
 			angleIndex,
@@ -97,6 +99,7 @@ class Autocomplete {
 		}
 
 		const isMention = mentionIndex != -1;
+		const isGroupMention = GroupMentionIndex != -1;//将来、グループ対応の予定[TODO]
 		const isHashtag = hashtagIndex != -1;
 		const isEmoji = emojiIndex != -1;
 		const isAngle = angleIndex != -1;
@@ -109,7 +112,14 @@ class Autocomplete {
 				this.open('user', username);
 				opened = true;
 			}
-		}
+		}/*
+		if (isGroupMention) {
+			const username = text.substr(mentionIndex + 1);
+			if (username.match(/^[\w-]+$/)) {
+				this.open('group', username);
+				opened = true;
+			}
+		}*/ //将来、グループ対応の予定[TODO]
 
 		if (isHashtag && opened == false && !this.opts.userOnly) {
 			const hashtag = text.substr(hashtagIndex + 1);

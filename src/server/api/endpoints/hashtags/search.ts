@@ -17,9 +17,8 @@ export const meta = {
 
 	params: {
 		limit: {
-			validator: $.optional.either($.optional.num.range(1, 100), $.str.pipe(v => 1 <= Number(v) && Number(v) <= 100)),
+			validator: $.optional.num.range(1, 100),
 			default: 10,
-			transform: (v: any) => JSON.parse(v),
 			desc: {
 				'ja-JP': '最大数'
 			}
