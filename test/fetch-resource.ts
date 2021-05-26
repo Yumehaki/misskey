@@ -12,8 +12,8 @@ process.env.NODE_ENV = 'test';
 
 import * as assert from 'assert';
 import * as childProcess from 'child_process';
-import { async, launchServer, signup, post, api, simpleGet, port } from './utils';
-import * as openapi from '@redocly/openapi-core';
+import { async, launchServer, signup, post, api, simpleGet } from './utils';
+
 const db = require('../built/db/mongodb').default;
 
 // Request Accept
@@ -82,20 +82,6 @@ describe('Fetch resource', () => {
 		}));
 	});
 
-	it('Validate api.json', async(async () => {
-		const config = await openapi.loadConfig();
-		const result = await openapi.bundle({
-			config,
-			ref: `http://localhost:${port}/api.json`
-		});
-
-		for (const problem of result.problems) {
-			console.log(`${problem.message} - ${problem.location[0]?.pointer}`);
-		}
-
-		assert.strictEqual(result.problems.length, 0);
-	}));
-	
 	describe('/@:username', () => {
 		it('Only AP => AP', async(async () => {
 			const res = await simpleGet(`/@${alice.username}`, ONLY_AP);

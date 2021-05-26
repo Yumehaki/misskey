@@ -42,7 +42,7 @@ export async function getPackedTimeline(me: ILocalUser | null, query: any, sort:
 		}
 	],	// aggregates
 	{
-		maxTimeMS: 55000,
+		maxTimeMS: 25000,
 	});
 
 	return await packMany(timeline, me);

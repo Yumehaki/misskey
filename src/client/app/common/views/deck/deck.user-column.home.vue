@@ -96,7 +96,7 @@ export default Vue.extend({
 			this.makePromise = cursor => this.$root.api('users/notes', {
 				userId: this.user.id,
 				limit: fetchLimit + 1,
-				untilId: cursor ? cursor : undefined,
+				untilDate: cursor ? cursor : new Date().getTime() + 1000 * 86400 * 365,
 				withFiles: this.withFiles,
 				includeMyRenotes: this.$store.state.settings.showMyRenotes,
 				includeRenotedMyNotes: this.$store.state.settings.showRenotedMyNotes,
@@ -106,7 +106,7 @@ export default Vue.extend({
 					notes.pop();
 					return {
 						notes: notes,
-						cursor: notes[notes.length - 1].id
+						cursor: new Date(notes[notes.length - 1].createdAt).getTime()
 					};
 				} else {
 					return {

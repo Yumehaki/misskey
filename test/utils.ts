@@ -3,7 +3,7 @@ import * as http from 'http';
 import fetch from 'node-fetch';
 import loadConfig from '../src/config/load';
 
-export const port = loadConfig().port;
+const port = loadConfig().port;
 
 export const async = (fn: Function) => (done: Function) => {
 	fn().then(() => {

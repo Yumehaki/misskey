@@ -120,7 +120,7 @@ export default async function(user: IUser, note: INote, quiet = false) {
 		}
 
 		//#region ローカルの投稿なら削除アクティビティを配送
-		if (isLocalUser(user) && !note.localOnly) {
+		if (isLocalUser(user)) {
 			(async () => {
 				let renote: INote | undefined;
 

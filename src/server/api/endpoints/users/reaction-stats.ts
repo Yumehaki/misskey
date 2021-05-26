@@ -13,14 +13,6 @@ export const meta = {
 	tags: ['reactions', 'users'],
 
 	params: {
-		target: {
-			validator: $.optional.str,
-			desc: {
-				'ja-JP': 'target',
-				'en-US': 'target'
-			}
-		},
-
 		userId: {
 			validator: $.type(ID),
 			transform: transform,
@@ -31,16 +23,18 @@ export const meta = {
 		},
 
 		limit: {
-			validator: $.optional.num.range(1, 1000),
+			validator: $.optional.either($.optional.num.range(1, 1000), $.str.pipe(v => 1 <= Number(v) && Number(v) <= 1000)),
 			default: 20,
+			transform: (v: any) => JSON.parse(v),
 			desc: {
 				'ja-JP': '取得数'
 			}
 		},
 
 		days: {
-			validator: $.optional.num.range(1, 30),
+			validator: $.optional.either($.optional.num.range(1, 30), $.str.pipe(v => 1 <= Number(v) && Number(v) <= 30)),
 			default: 30,
+			transform: (v: any) => JSON.parse(v),
 			desc: {
 				'ja-JP': '集計期間 (日)'
 			}
@@ -58,7 +52,7 @@ export const meta = {
 
 	requireCredential: false,
 	allowGet: true,
-	cacheSec: 3600 * 3,
+	cacheSec: 600,
 };
 
 type ReactionStat = {
@@ -97,7 +91,7 @@ export default define(meta, async (ps, me) => {
 	]) as Promise<ReactionStat[]>;
 
 	// よくされるリアクション
-	const queryReacteds = ps.target === 'reactions' ? [] : Note.aggregate([
+	const queryReacteds = Note.aggregate([
 		{
 			$match: {
 				userId: ps.userId,

@@ -511,10 +511,6 @@ const activitystreams = {
     "shares": {
       "@id": "as:shares",
       "@type": "@id"
-    },
-    "alsoKnownAs": {
-      "@id": "as:alsoKnownAs",
-      "@type": "@id"
     }
   }
 };

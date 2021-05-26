@@ -9,24 +9,27 @@ export const meta = {
 
 	params: {
 		limit: {
-			validator: $.optional.num.range(1, 1000),
+			validator: $.optional.either($.optional.num.range(1, 1000), $.str.pipe(v => 1 <= Number(v) && Number(v) <= 100)),
 			default: 10,
+			transform: (v: any) => JSON.parse(v),
 			desc: {
 				'ja-JP': '取得数'
 			}
 		},
 
 		days: {
-			validator: $.optional.num.range(1, 30),
+			validator: $.optional.either($.optional.num.range(1, 30), $.str.pipe(v => 1 <= Number(v) && Number(v) <= 30)),
 			default: 30,
+			transform: (v: any) => JSON.parse(v),
 			desc: {
 				'ja-JP': '集計期間 (日)'
 			}
 		},
 
 		offset: {
-			validator: $.optional.num.min(0),
+			validator: $.optional.either($.optional.num.min(0), $.str.pipe(v => 0 <= Number(v))),
 			default: 0,
+			transform: (v: any) => JSON.parse(v),
 			desc: {
 				'ja-JP': 'オフセット'
 			}

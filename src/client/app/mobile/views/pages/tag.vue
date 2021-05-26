@@ -4,7 +4,6 @@
 	<template #func>
 		<button @click="fn"><fa icon="pencil-alt"/></button>
 	</template>
-	
 	<main>
 		<div class="search-area">
 			<x-search-box :word="`#${$route.params.tag}`"/>

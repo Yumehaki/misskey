@@ -187,6 +187,7 @@ export type IMeta = {
 	hidedTags?: string[];
 	mascotImageUrl?: string;
 	bannerUrl?: string;
+	errorImageUrl?: string;
 	iconUrl?: string;
 
 	cacheRemoteFiles?: boolean;

@@ -141,7 +141,7 @@ export default Vue.extend({
 			fetching: true,
 			users: [],
 			hashtags: [],
-			emojis: [] as EmojiDef[],,
+			emojis: [],
 			mfms: [] as MfmDef[],
 			items: [],
 			select: -1,
@@ -259,7 +259,6 @@ export default Vue.extend({
 					});
 				}
 			} else if (this.type == 'emoji') {
-				// :だけはカスタム絵文字全件
 				if (this.q == null || this.q == '') {
 					this.emojis = this.emojiDb.filter(x => x.isCustomEmoji && !x.aliasOf).sort((a, b) => {
 						var textA = a.name.toUpperCase();
@@ -269,34 +268,18 @@ export default Vue.extend({
 					return;
 				}
 
-				const matched: any[] = [];
+				const matched = [];
 				const max = 30;
 
 				this.emojiDb.some(x => {
 					if (x.name.startsWith(this.q) && !x.aliasOf && !matched.some(y => y.emoji == x.emoji)) matched.push(x);
+					return matched.length == max;
+				});
+				if (matched.length < max) {
+					this.emojiDb.some(x => {
+						if (x.name.startsWith(this.q) && !matched.some(y => y.emoji == x.emoji)) matched.push(x);
 						return matched.length == max;
 					});
-					if (matched.length < max) {
-						// 完全一致
-					if (matched.length < max) {
-						this.emojiDb.some(x => {
-							if (x.name === this.q && !matched.some(y => y.emoji == x.emoji)) matched.push(x);
-							return matched.length == max;
-						});
-					}
-					// カスタム絵文字マッチ
-					if (matched.length < max) {
-						this.emojiDb.some(x => {
-							if (x.name.includes(this.q) && x.isCustomEmoji && !x.aliasOf && !matched.some(y => y.emoji == x.emoji)) matched.push(x);
-							return matched.length == max;
-						});
-					}
-					if (matched.length < max) {
-						this.emojiDb.some(x => {
-							if (x.name.startsWith(this.q) && !x.aliasOf && !matched.some(y => y.emoji == x.emoji)) matched.push(x);
-							return matched.length == max;
-						});
-					}
 				}
 				if (matched.length < max) {
 					this.emojiDb.some(x => {
@@ -310,10 +293,6 @@ export default Vue.extend({
 				if (this.q.startsWith('<')) {
 					const name = this.q.substr(1);
 					const db = angleDb.filter(x => x.name.startsWith(name));
-					this.mfms = db;
-				} else if (this.q.startsWith('[')) {
-					const name = this.q.substr(1);
-					const db = fnDb.filter(x => x.name.startsWith(name));
 					this.mfms = db;
 				}
 			}

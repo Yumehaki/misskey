@@ -21,15 +21,17 @@ export const meta = {
 
 	params: {
 		days: {
-			validator: $.optional.num.range(0, 33),
+			validator: $.optional.either($.optional.num.range(0, 33), $.str.pipe(v => 0 <= Number(v) && Number(v) <= 33)),
 			default: 2,
+			transform: (v: any) => JSON.parse(v),
 			desc: {
 				'ja-JP': '集計期間 (日)'
 			}
 		},
 		limit: {
-			validator: $.optional.num.range(0, 100),
+			validator: $.optional.either($.optional.num.range(0, 100), $.str.pipe(v => 0 <= Number(v) && Number(v) <= 100)),
 			default: 10,
+			transform: (v: any) => JSON.parse(v),
 			desc: {
 				'ja-JP': '最大数'
 			}
@@ -41,22 +43,25 @@ export const meta = {
 			}
 		},
 		excludeNsfw: {
-			validator: $.optional.boolean,
+			validator: $.optional.either($.boolean, $.str.or(['true', 'false'])),	// optional bool with string
 			default: false,
+			transform: (v: any) => JSON.parse(v),
 			desc: {
 				'ja-JP': 'true にするとNSFWを除外します'
 			}
 		},
 		excludeSfw: {
-			validator: $.optional.boolean,
+			validator: $.optional.either($.boolean, $.str.or(['true', 'false'])),	// optional bool with string
 			default: false,
+			transform: (v: any) => JSON.parse(v),
 			desc: {
 				'ja-JP': 'NSFWのみ'
 			}
 		},
 		includeGlobal: {
-			validator: $.optional.boolean,
+			validator: $.optional.either($.boolean, $.str.or(['true', 'false'])),	// optional bool with string
 			default: false,
+			transform: (v: any) => JSON.parse(v),
 			desc: {
 				'ja-JP': 'true にすると連合を含めます'
 			}

@@ -45,17 +45,13 @@ export default Vue.extend({
 	data() {
 		return {
 			faRandom, faThumbsUp, faThumbsDown,
-			bases: this.reactions || this.$store.state.settings.reactions,
-			mosts: [],
+			rs: this.reactions || this.$store.state.settings.reactions,
 			text: null,
 			disliked: false,
 		};
 	},
 
 	computed: {
-		rs(): any {
-			return this.bases.concat(this.mosts);
-		},
 		keymap(): any {
 			return {
 				'esc': this.close,
@@ -73,18 +69,10 @@ export default Vue.extend({
 				const reaction = list[index];
 				result.push(reaction);
 			}
-			this.bases = result;
+			this.rs = result;
 		}
 
-		this.bases = this.bases.concat(this.$store.state.device.recentReactions || []);
-		this.$root.api('users/reaction-stats', {
-			userId: this.$store.state.i.id,
-			limit: 10,
-			target: 'reactions',
-		}, false, true).then((reactionStats: any) => {
-			const mosts = reactionStats.reactions.map((x: any) => (x.reaction as string).replace(/@.:$/, ':'));
-			this.mosts = mosts.filter(x => !this.bases.includes(x));
-		});
+		this.rs = this.rs.concat(this.$store.state.device.recentReactions || []);
 	},
 
 	mounted() {
@@ -125,7 +113,7 @@ export default Vue.extend({
 			anime({
 				targets: this.$refs.backdrop,
 				opacity: 1,
-				duration: this.animation ? 100 : 0,
+				duration: this.animation ? 50 : 0,
 				easing: 'linear'
 			});
 
@@ -133,7 +121,7 @@ export default Vue.extend({
 				targets: this.$refs.popover,
 				opacity: 1,
 				scale: [0.5, 1],
-				duration: this.animation ? 500 : 0
+				duration: this.animation ? 250 : 0
 			});
 		});
 	},

@@ -8,6 +8,7 @@
 			<ui-textarea v-model="description">{{ $t('instance-description') }}</ui-textarea>
 			<ui-input v-model="mascotImageUrl"><template #icon><fa icon="link"/></template>{{ $t('logo-url') }}</ui-input>
 			<ui-input v-model="bannerUrl"><template #icon><fa icon="link"/></template>{{ $t('banner-url') }}</ui-input>
+			<ui-input v-model="errorImageUrl"><template #icon><fa icon="link"/></template>{{ $t('error-image-url') }}</ui-input>
 			<ui-input v-model="languages"><template #icon><fa icon="language"/></template>{{ $t('languages') }}<template #desc>{{ $t('languages-desc') }}</template></ui-input>
 		</section>
 		<section class="fit-bottom">
@@ -88,7 +89,7 @@
 	</ui-card>
 
 	<ui-card>
-		<template #title>{{ $t('twitter-integration-config') }}</template>
+		<template #title><fa :icon="['fab', 'twitter']"/> {{ $t('twitter-integration-config') }}</template>
 		<section>
 			<ui-switch v-model="enableTwitterIntegration">{{ $t('enable-twitter-integration') }}</ui-switch>
 			<ui-horizon-group>
@@ -101,7 +102,7 @@
 	</ui-card>
 
 	<ui-card>
-		<template #title>{{ $t('github-integration-config') }}</template>
+		<template #title><fa :icon="['fab', 'github']"/> {{ $t('github-integration-config') }}</template>
 		<section>
 			<ui-switch v-model="enableGithubIntegration">{{ $t('enable-github-integration') }}</ui-switch>
 			<ui-horizon-group>
@@ -114,7 +115,7 @@
 	</ui-card>
 
 	<ui-card>
-		<template #title>{{ $t('discord-integration-config') }}</template>
+		<template #title><fa :icon="['fab', 'discord']"/> {{ $t('discord-integration-config') }}</template>
 		<section>
 			<ui-switch v-model="enableDiscordIntegration">{{ $t('enable-discord-integration') }}</ui-switch>
 			<ui-horizon-group>
@@ -152,6 +153,7 @@ export default Vue.extend({
 			showReplayInPublicTimeline: false,
 			mascotImageUrl: null,
 			bannerUrl: null,
+			errorImageUrl: null,
 			name: null,
 			description: null,
 			languages: null,
@@ -199,6 +201,7 @@ export default Vue.extend({
 			this.showReplayInPublicTimeline = meta.showReplayInPublicTimeline;
 			this.mascotImageUrl = meta.mascotImageUrl;
 			this.bannerUrl = meta.bannerUrl;
+			this.errorImageUrl = meta.errorImageUrl;
 			this.name = meta.name;
 			this.description = meta.description;
 			this.languages = meta.langs.join(' ');
@@ -289,6 +292,7 @@ export default Vue.extend({
 				showReplayInPublicTimeline: this.showReplayInPublicTimeline,
 				mascotImageUrl: this.mascotImageUrl,
 				bannerUrl: this.bannerUrl,
+				errorImageUrl: this.errorImageUrl,
 				name: this.name,
 				description: this.description,
 				langs: this.languages ? this.languages.split(' ') : [],

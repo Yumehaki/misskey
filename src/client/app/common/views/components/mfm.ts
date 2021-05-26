@@ -198,26 +198,6 @@ case 'fn': {
 							style = !this.$store.state.settings.disableAnimatedMfm ? 'animation: mfm-rgbshift 2s linear infinite;' : '';
 							break;
 						}
-						case 'd6': {
-							style = `font-size:  16.7%;`;
-							break;
-						}
-						case 'd5': {
-							style = `font-size:  20%;`;
-							break;
-						}
-						case 'd4': {
-							style = `font-size:  25%;`;
-							break;
-						}
-						case 'd3': {
-							style = `font-size:  33.3%;`;
-							break;
-						}
-						case 'd2': {
-							style = `font-size:  50%;`;
-							break;
-						}
 						case 'x2': {
 							style = `font-size: 200%;`;
 							break;
@@ -407,36 +387,6 @@ case 'fn': {
 				case 'rgbshift': {
 					return (createElement as any)('span', {
 						style: !this.$store.state.settings.disableAnimatedMfm ? 'animation: mfm-rgbshift 2s linear infinite;' : ''
-					}, genEl(node.children));
-				}
-				//dは小さく、xは大きく
-				case 'd2': {
-					return (createElement as any)('span', {
-						style: `font-size: 50%;`
-					}, genEl(node.children));
-				}
-
-				case 'd3': {
-					return (createElement as any)('span', {
-						style: `font-size:  33.3%;`
-					}, genEl(node.children));
-				}
-
-				case 'd4': {
-					return (createElement as any)('span', {
-						style: `font-size:  25%;`
-					}, genEl(node.children));
-				}
-
-				case 'd5': {
-					return (createElement as any)('span', {
-						style: `font-size:  20%;`
-					}, genEl(node.children));
-				}
-
-				case 'd6': {
-					return (createElement as any)('span', {
-						style: `font-size:  16.7%;`
 					}, genEl(node.children));
 				}
 				case 'x2': {

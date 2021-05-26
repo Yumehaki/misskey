@@ -6,18 +6,17 @@ import instanceChart from '../../services/chart/instance';
 import Logger from '../../services/logger';
 import { UpdateInstanceinfo } from '../../services/update-instanceinfo';
 import { isBlockedHost, isClosedHost } from '../../services/instance-moderation';
-import { DeliverJobData } from '../types';
+import { DeliverJobData } from '../type';
 import { publishInstanceModUpdated } from '../../services/server-event';
 
 const logger = new Logger('deliver');
 
-let latest: string | null = null;
+let latest: string = null;
 
 export default async (job: Bull.Job<DeliverJobData>) => {
-	if (!job.data.to?.match(/^https?:/)) {
-		return 'skip (invalid URL)';
-	}
-	const { host } = new URL(job.data.to);
+	const { protocol, host } = new URL(job.data.to);
+
+	if (protocol !== 'https:') return 'skip (invalid protocol)';
 
 	// ブロック/閉鎖してたら中断
 	if (await isBlockedHost(host)) {

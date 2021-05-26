@@ -13,7 +13,6 @@ import { importMute } from './import-mute';
 import { importUserLists } from './import-user-lists';
 import { notifyPollFinished } from './notify-poll-finished';
 import { expireMute } from './expire-mute';
-import { DbJobData } from '../../types';
 
 const jobs = {
 	deleteNotes,
@@ -30,10 +29,10 @@ const jobs = {
 	importUserLists,
 	notifyPollFinished,
 	expireMute,
-} as Record<string, Bull.ProcessCallbackFunction<DbJobData> | Bull.ProcessPromiseFunction<DbJobData>>;;
+} as any;
 
 export default function(dbQueue: Bull.Queue) {
 	for (const [k, v] of Object.entries(jobs)) {
-		dbQueue.process(k, v);
+		dbQueue.process(k, v as any);
 	}
 }

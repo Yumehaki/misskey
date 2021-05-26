@@ -116,6 +116,7 @@ export default define(meta, async (ps, me) => {
 		swPublickey: instance.swPublicKey,
 		mascotImageUrl: instance.mascotImageUrl,
 		bannerUrl: instance.bannerUrl,
+		errorImageUrl: instance.errorImageUrl,
 		iconUrl: instance.iconUrl,
 		maxNoteTextLength: instance.maxNoteTextLength,
 		emojis: emojis,

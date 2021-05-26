@@ -9,7 +9,7 @@ import tslint from 'gulp-tslint';
 const stylus = require('gulp-stylus');
 import * as rimraf from 'rimraf';
 import * as rename from 'gulp-rename';
-const replace = require('gulp-replace');
+import * as replace from 'gulp-replace';
 const terser = require('gulp-terser');
 const cleanCSS = require('gulp-clean-css');
 
