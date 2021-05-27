@@ -462,12 +462,7 @@ describe('parse', () => {
 					tree('bold', [
 						text('x')
 					], {}),
-					leaf('mention', {
-						acct: '@a',
-						canonical: '@a',
-						username: 'a',
-						host: null
-					})
+					text('@a')
 				]);
 
 				const tokens4 = parseFull('@\n@v\n@veryverylongusername');
@@ -517,8 +512,7 @@ describe('parse', () => {
 			it('with text (zenkaku)', () => {
 				const tokens = parseFull('こんにちは#世界');
 				assert.deepStrictEqual(tokens, [
-					text('こんにちは'),
-					leaf('hashtag', { hashtag: '世界' })
+					text('こんにちは#世界')
 				]);
 			});
 
@@ -583,9 +577,7 @@ describe('parse', () => {
 			it('with brackets', () => {
 				const tokens1 = parseFull('(#foo)');
 				assert.deepStrictEqual(tokens1, [
-					text('('),
-					leaf('hashtag', { hashtag: 'foo' }),
-					text(')'),
+					text('(#foo)')
 				]);
 			});
 
@@ -1413,7 +1405,7 @@ describe('Extract mentions', () => {
 	});
 
 	it('装飾の下', () => {
-		const ast = parseBasic('@foo **@bar** @baz')!;
+		const ast = parseBasic('@foo ** @bar ** @baz')!;
 		const mentions = extractMentions(ast);
 		assert.deepStrictEqual(mentions, [{
 			username: 'foo',

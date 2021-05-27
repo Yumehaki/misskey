@@ -45,20 +45,24 @@ export default Vue.extend({
 	data() {
 		return {
 			faRandom, faThumbsUp, faThumbsDown,
-			rs: this.reactions || this.$store.state.settings.reactions,
+			bases: this.reactions || this.$store.state.settings.reactions,
+			mosts: [],
 			text: null,
 			disliked: false,
 		};
 	},
 
 	computed: {
+		rs(): any {
+			return this.bases.concat(this.mosts);
+		},
 		keymap(): any {
 			return {
 				'esc': this.close,
 			};
 		}
 	},
-
+	
 	created() {
 		if (this.$store.state.device.enableRandomReactionPicker) {
 			const list = emojilist.filter(x => x.category !== 'flags').map((x: any) => x.char);
@@ -69,10 +73,17 @@ export default Vue.extend({
 				const reaction = list[index];
 				result.push(reaction);
 			}
-			this.rs = result;
+			this.bases = result;
 		}
 
-		this.rs = this.rs.concat(this.$store.state.device.recentReactions || []);
+		this.bases = this.bases.concat(this.$store.state.device.recentReactions || []);
+		this.$root.api('users/reaction-stats', {
+			userId: this.$store.state.i.id,
+			limit: 10,
+		}, false, true).then((reactionStats: any) => {
+			const mosts = reactionStats.reactions.map((x: any) => (x.reaction as string).replace(/@.:$/, ':'));
+			this.mosts = mosts.filter(x => !this.bases.includes(x));
+		});
 	},
 
 	mounted() {

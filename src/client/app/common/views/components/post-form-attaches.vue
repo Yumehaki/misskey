@@ -9,7 +9,7 @@
 			</div>
 		</div>
 	</x-draggable>
-	<p class="remain">{{ 12 - files.length }}/4</p>
+	<p class="remain">{{ 20 - files.length }}/20</p>
 </div>
 </template>
 
