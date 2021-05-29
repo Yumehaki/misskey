@@ -36,7 +36,8 @@ export type ThinPackedNote = {
 	mentions: string[];
 
 	notHaveDecorationMfm?: boolean;
-}
+
+	isHidden?: boolean;}
 
 export type PackedNote = ThinPackedNote & {
 	reply?: ThinPackedNote | null;

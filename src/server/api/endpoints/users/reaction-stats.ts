@@ -13,6 +13,13 @@ export const meta = {
 	tags: ['reactions', 'users'],
 
 	params: {
+		target: {
+			validator: $.optional.str,
+			desc: {
+				'ja-JP': 'target',
+				'en-US': 'target'
+			}
+		},
 		userId: {
 			validator: $.type(ID),
 			transform: transform,
@@ -91,7 +98,7 @@ export default define(meta, async (ps, me) => {
 	]) as Promise<ReactionStat[]>;
 
 	// よくされるリアクション
-	const queryReacteds = Note.aggregate([
+	const queryReacteds = ps.target === 'reactions' ? [] : Note.aggregate([
 		{
 			$match: {
 				userId: ps.userId,
