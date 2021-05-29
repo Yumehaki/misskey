@@ -298,7 +298,6 @@ export const pack = async (
 					console.warn(e);
 					return [];
 				});
-			}
 		} else {
 			return [];
 		}
