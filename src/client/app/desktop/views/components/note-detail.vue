@@ -24,7 +24,7 @@
 				<mk-user-name :user="appearNote.user"/>
 			</router-link>
 			<span class="username"><mk-acct :user="appearNote.user"/></span>
-			<x-instance-info v-if="appearNote.user.instance && !$store.state.device.disableShowingInstanceInfo" :instance="appearNote.user.instance" />
+			<x-instance-info v-if="appearNote.user.instance && $store.state.device.showInstanceInfo" :instance="appearNote.user.instance" />
 		</header>
 		<div class="body">
 			<p v-if="appearNote.cw != null" class="cw">
@@ -100,7 +100,6 @@ import XSub from './note.sub.vue';
 import noteSubscriber from '../../../common/scripts/note-subscriber';
 import noteMixin from '../../../common/scripts/note-mixin';
 import { faClock, faLaugh } from '@fortawesome/free-regular-svg-icons';
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import XVisibilityIcon from '../../../common/views/components/visibility-icon.vue';
 import XInstanceInfo from '../../../common/views/components/instance-info.vue';
 
@@ -127,7 +126,7 @@ export default Vue.extend({
 
 	data() {
 		return {
-			faClock, faLaugh, faPlusCircle,
+			faClock, faLaugh,
 			conversation: [],
 			conversationFetching: false,
 			replies: []

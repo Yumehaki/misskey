@@ -40,11 +40,11 @@ export default Vue.extend({
 			if (time == null) return this.$t('@.time.unknown');
 			const ago = (this.now.getTime() - time.getTime()) / 1000/*ms*/;
 			return (
-				ago >= 31536000 ? this.$t('@.time.years_ago')  .replace('{}', (~~(ago / 31536000)).toString()).replace('{b}', (~~(ago / 2592000 % 12)).toString()) :
-				ago >= 2592000  ? this.$t('@.time.months_ago') .replace('{}', (~~(ago / 2592000)).toString()).replace('{b}', (~~(ago / 86400 % 30)).toString()) :
-				ago >= 604800   ? this.$t('@.time.weeks_ago')  .replace('{}', (~~(ago / 604800)).toString()).replace('{b}', (~~(ago / 86400 % 7)).toString()) :
-				ago >= 86400    ? this.$t('@.time.days_ago')   .replace('{}', (~~(ago / 86400)).toString()).replace('{b}', (~~(ago / 3600 % 24)).toString()) :
-				ago >= 3600     ? this.$t('@.time.hours_ago')  .replace('{}', (~~(ago / 3600)).toString()).replace('{b}', (~~(ago / 60 % 60)).toString()) :
+				ago >= 31536000 ? this.$t('@.time.years_ago')  .replace('{}', (~~(ago / 31536000)).toString()).replace('{b}', (~~(ago % 31536000 / 2592000)).toString()) :
+				ago >= 2592000  ? this.$t('@.time.months_ago') .replace('{}', (~~(ago / 2592000)).toString()).replace('{b}', (~~(ago % 2592000 / 604800)).toString()) :
+				ago >= 604800   ? this.$t('@.time.weeks_ago')  .replace('{}', (~~(ago / 604800)).toString()).replace('{b}', (~~(ago % 604800 / 86400)).toString()) :
+				ago >= 86400    ? this.$t('@.time.days_ago')   .replace('{}', (~~(ago / 86400)).toString()).replace('{b}', (~~(ago % 86400 / 3600)).toString()) :
+				ago >= 3600     ? this.$t('@.time.hours_ago')  .replace('{}', (~~(ago / 3600)).toString()).replace('{b}', (~~(ago % 3600 / 60)).toString()) :
 				ago >= 60       ? this.$t('@.time.minutes_ago').replace('{}', (~~(ago / 60)).toString()).replace('{b}', (~~(ago % 60)).toString()) :
 				ago >= 10       ? this.$t('@.time.seconds_ago').replace('{}', (~~(ago % 60)).toString()) :
 				ago >= -10      ? this.$t('@.time.just_now') :

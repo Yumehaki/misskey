@@ -83,12 +83,15 @@ class Autocomplete {
 		const emojiIndex = text.lastIndexOf(':');
 		const angleIndex = text.lastIndexOf('<');
 		const fnIndex = text.lastIndexOf('[');
+		const groupIndex = text.lastIndexOf('$');
+
 		const max = Math.max(
 			mentionIndex,
 			hashtagIndex,
 			emojiIndex,
 			angleIndex,
 			fnIndex,
+			groupIndex,
 		);
 
 		if (max == -1) {
@@ -101,6 +104,8 @@ class Autocomplete {
 		const isEmoji = emojiIndex != -1;
 		const isAngle = angleIndex != -1;
 		const isFn = fnIndex != -1;
+		const isGroup = groupIndex != -1;
+
 		let opened = false;
 
 		if (isMention) {
@@ -134,10 +139,19 @@ class Autocomplete {
 				opened = true;
 			}
 		}
+
 		if (isFn && opened == false) {
 			const fn = text.substr(fnIndex + 1);
 			if (fn.match(/^[a-z]*$/)) {
 				this.open('mfm', `[${fn}`);
+				opened = true;
+			}
+		}
+		
+		if (isGroup) {
+			const groupname = text.substr(groupIndex + 1);
+			if (groupname.match(/^[\w-]+$/)) {
+				this.open('group', groupname);
 				opened = true;
 			}
 		}

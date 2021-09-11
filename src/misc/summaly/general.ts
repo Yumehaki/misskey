@@ -24,6 +24,8 @@ export default async (url: URL): Promise<Summary> => {
 
 	const landingUrl = new URL($.documentInfo().url);
 
+	const twitterCard = $('meta[property="twitter:card"]').attr('content');
+
 	let title =
 		$('meta[property="og:title"]').attr('content') ||
 		$('meta[property="twitter:title"]').attr('content') ||
@@ -35,6 +37,7 @@ export default async (url: URL): Promise<Summary> => {
 	}
 
 	title = clip(decode(title), 100) || null;
+
 	let image =
 		$('meta[property="og:image"]').attr('content') ||
 		$('meta[property="twitter:image"]').attr('content') ||
@@ -46,8 +49,8 @@ export default async (url: URL): Promise<Summary> => {
 	image = image ?  new URL(image, landingUrl.href).href : null;
 
 	const playerUrl =
-		$('meta[property="twitter:player"]').attr('content') ||
-		$('meta[name="twitter:player"]').attr('content') ||
+		(twitterCard !== 'summary_large_image' && $('meta[property="twitter:player"]').attr('content')) ||
+		(twitterCard !== 'summary_large_image' && $('meta[name="twitter:player"]').attr('content')) ||
 		$('meta[property="og:video"]').attr('content') ||
 		$('meta[property="og:video:secure_url"]').attr('content') ||
 		$('meta[property="og:video:url"]').attr('content') ||
@@ -86,6 +89,7 @@ export default async (url: URL): Promise<Summary> => {
 		null;
 
 	siteName = siteName ? decode(siteName) : null;
+
 	const favicon =
 		$('link[rel="shortcut icon"]').attr('href') ||
 		$('link[rel="icon"]').attr('href') ||

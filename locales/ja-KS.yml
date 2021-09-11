@@ -30,7 +30,7 @@ common:
   got-it: "ほい"
   customization-tips:
     title: "カスタマイズのヒント"
-    paragraph: "<p>ホームのカスタマイズは、ウィジェットを増やしたりほかしたり、ドラッグ＆ドロップして並び替えたりしていじれるで。</p><p>一部ウィジェットは<strong><strong>右</strong>クリック</strong>で表示もいじれるんや。</p><p>ほかしたいときはヘッダーの<strong>「ゴミ箱」</strong>にほうりこんでら。</p><p>「完了」押したらお終いやで。</p>"
+    paragraph: "ホームのカスタマイズは、ウィジェットを増やしたりほかしたり、ドラッグ＆ドロップして並び替えたりしていじれるで。一部ウィジェットは右クリックで表示もいじれるんや。ほかしたいときはヘッダーの「ゴミ箱」にほうりこんでら。「完了」押したらお終いやで。"
     gotit: "Got it!"
   notification:
     file-uploaded: "ファイルがアップロードされたで"
@@ -49,7 +49,7 @@ common:
     hours_ago: "{}時間{b}分前"
     days_ago: "{}日{b}時間前"
     weeks_ago: "{}週間{b}日前"
-    months_ago: "{}ヶ月{b}日前"
+    months_ago: "{}ヶ月{b}週間前"
     years_ago: "{}年{b}ヶ月前"
   month-and-day: "{month}月 {day}日"
   trash: "ゴミ箱"

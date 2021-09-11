@@ -20,7 +20,7 @@
 import Vue from 'vue';
 import i18n from '../../../i18n';
 import anime from 'animejs';
-import { emojiRegex, vendorEmojiRegex, localEmojiRegex } from '../../../../../misc/emoji-regex';
+import { emojiRegex, vendorEmojiRegex } from '../../../../../misc/emoji-regex';
 import { faRandom, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { emojilist } from '../../../../../misc/emojilist';
 
@@ -62,7 +62,7 @@ export default Vue.extend({
 			};
 		}
 	},
-	
+
 	created() {
 		if (this.$store.state.device.enableRandomReactionPicker) {
 			const list = emojilist.filter(x => x.category !== 'flags').map((x: any) => x.char);
@@ -77,6 +77,7 @@ export default Vue.extend({
 		}
 
 		this.bases = this.bases.concat(this.$store.state.device.recentReactions || []);
+
 		this.$root.api('users/reaction-stats', {
 			userId: this.$store.state.i.id,
 			limit: 10,
@@ -125,7 +126,7 @@ export default Vue.extend({
 			anime({
 				targets: this.$refs.backdrop,
 				opacity: 1,
-				duration: this.animation ? 50 : 0,
+				duration: this.animation ? 100 : 0,
 				easing: 'linear'
 			});
 
@@ -133,7 +134,7 @@ export default Vue.extend({
 				targets: this.$refs.popover,
 				opacity: 1,
 				scale: [0.5, 1],
-				duration: this.animation ? 250 : 0
+				duration: this.animation ? 500 : 0
 			});
 		});
 	},
@@ -172,7 +173,7 @@ export default Vue.extend({
 				}
 			}
 
-			const m = this.text.match(vendorEmojiRegex) || this.text.match(localEmojiRegex) || this.text.match(emojiRegex);
+			const m = this.text.match(vendorEmojiRegex) || this.text.match(emojiRegex);
 			if (!m) return;
 			this.react(m[1]);
 		},
@@ -197,7 +198,7 @@ export default Vue.extend({
 				y: rect.top + window.pageYOffset
 			});
 			vm.$once('chosen', emoji => {
-				const m = emoji.match(vendorEmojiRegex) || emoji.match(localEmojiRegex) || emoji.match(emojiRegex);
+				const m = emoji.match(vendorEmojiRegex) || emoji.match(emojiRegex);
 				this.react(m ? m[1] : emoji);
 			});
 			this.$once('hook:beforeDestroy', () => {

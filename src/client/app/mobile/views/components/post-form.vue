@@ -213,6 +213,7 @@ export default Vue.extend({
 					this.$emit('change-attached-files', this.files);
 				}
 			}
+
 			this.$nextTick(() => {
 				if (this.initialNote) {
 					// 削除して編集
@@ -238,11 +239,13 @@ export default Vue.extend({
 					this.quoteId = init.renote ? init.renote.id : null;
 					if (!this.renote) this.renote = this.initialNote.renote;
 				}
+
 				if (!this.text && this.$route?.params?.tag) {
 					this.text = `#${this.$route.params.tag} `;
 				}
 
 				this.$nextTick(() => this.watch());
+
 				const len = this.text.length;
 				if (len > 0 && this.$refs.text) (this.$refs.text as HTMLTextAreaElement).setSelectionRange(len, len);
 			});

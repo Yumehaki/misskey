@@ -1,4 +1,4 @@
-mport * as fs from 'fs';
+import * as fs from 'fs';
 //import { inspect } from 'util';
 import { concat } from '../src/prelude/array';
 

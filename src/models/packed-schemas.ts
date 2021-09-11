@@ -37,7 +37,8 @@ export type ThinPackedNote = {
 
 	notHaveDecorationMfm?: boolean;
 
-	isHidden?: boolean;}
+	isHidden?: boolean;
+}
 
 export type PackedNote = ThinPackedNote & {
 	reply?: ThinPackedNote | null;
@@ -72,6 +73,7 @@ export type PackedUser = ThinPackedUser & {
 	isLocked?: boolean;
 	isSilenced?: boolean;
 	isSuspended?: boolean;
+	isDeleted?: boolean;
 	description?: string | null;
 	profile?: {
 		birthday?: string | null;

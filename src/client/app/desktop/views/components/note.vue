@@ -37,7 +37,7 @@
 		<mk-avatar class="avatar" :user="appearNote.user"/>
 		<div class="main">
 			<mk-note-header class="header" :note="appearNote" :mini="narrow" :no-info="detail"/>
-			<x-instance-info v-if="appearNote.user.instance && !$store.state.device.disableShowingInstanceInfo" :instance="appearNote.user.instance" />
+			<x-instance-info v-if="appearNote.user.instance && $store.state.device.showInstanceInfo" :instance="appearNote.user.instance" />
 			<div class="body" v-if="appearNote.deletedAt == null">
 				<p v-if="appearNote.cw != null" class="cw">
 					<mfm v-if="appearNote.cw != ''" class="text" :text="appearNote.cw" :author="appearNote.user" :i="$store.state.i" :custom-emojis="appearNote.emojis" :hashtags="appearNote.tags" :basic="!!appearNote.notHaveDecorationMfm" />
@@ -97,7 +97,7 @@
 				<button @click="menu()" ref="menuButton" class="button">
 					<fa icon="ellipsis-h"/>
 				</button>
-				<button class="button stayTl" :class="{ pinned: !!appearNote.stayTl }" @click="toggleStayTl"><fa icon="thumbtack"/></button>
+				<button v-if="$store.state.device.showTlPin" class="button stayTl" :class="{ pinned: !!appearNote.stayTl }" @click="toggleStayTl"><fa icon="thumbtack"/></button>
 			</footer>
 			<div class="deleted" v-if="appearNote.deletedAt != null">{{ $t('deleted') }}</div>
 		</div>
@@ -109,12 +109,11 @@
 <script lang="ts">
 import Vue from 'vue';
 import i18n from '../../../i18n';
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+
 import XSub from './note.sub.vue';
 import noteMixin from '../../../common/scripts/note-mixin';
 import noteSubscriber from '../../../common/scripts/note-subscriber';
 import { faClock, faLaugh } from '@fortawesome/free-regular-svg-icons';
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import XInstanceInfo from '../../../common/views/components/instance-info.vue';
 import XVisibilityIcon from '../../../common/views/components/visibility-icon.vue';
 
@@ -167,7 +166,7 @@ export default Vue.extend({
 
 	data() {
 		return {
-			faClock, faLaugh, faPlusCircle,
+			faClock, faLaugh,
 			conversation: [],
 			replies: []
 		};

@@ -181,6 +181,7 @@
 		<p><mfm :text="preview_marquee" :key="preview_marquee"/></p>
 		<ui-textarea :slim="false" class="text" v-model="preview_marquee"></ui-textarea>
 	</section>
+
 	<section>
 		<header>インライン数式</header>
 		<p>数式 (KaTeX)をインラインで表示します。</p>
@@ -254,6 +255,7 @@
 		<ui-textarea :slim="true" class="text" v-model="preview_font"></ui-textarea>
 	</section>
 </ui-card>
+
 </template>
 
 <script lang="ts">
@@ -310,6 +312,7 @@ export default Vue.extend({
 			preview_x: '[x2 あいう]\n[x3 あいう]\n[x4 あいう]\n[x5 あいう]\n[x6 あいう]',
 			preview_blur: '[blur あいう]',
 			preview_font: '[font.serif serif]\n[font.monospace monospace]',
+
 			faQuestionCircle
 		};
 	},

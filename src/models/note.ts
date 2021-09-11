@@ -8,7 +8,6 @@ import PollVote from './poll-vote';
 import NoteReaction from './note-reaction';
 import { packMany as packFileMany, IDriveFile } from './drive-file';
 import Following from './following';
-import Emoji from './emoji';
 import { packEmojis } from '../misc/pack-emojis';
 import { dbLogger } from '../db/logger';
 import { decodeReaction, decodeReactionCounts } from '../misc/reaction-lib';
@@ -138,7 +137,7 @@ export type INote = {
 export type IPoll = {
 	choices: IChoice[];
 	multiple?: boolean;
-	expiresAt?: Date;
+	expiresAt?: Date | null;
 };
 
 export type IChoice = {
@@ -289,16 +288,15 @@ export const pack = async (
 		if (db!._user) {
 			const host = db!._user.host;
 			const rs = Object.keys(reactionCounts)
-			.filter(x => x && x.startsWith(':'))
-			.map(x => decodeReaction(x))
-			.map(x => x.replace(/:/g, ''));
+				.filter(x => x && x.startsWith(':'))
+				.map(x => decodeReaction(x))
+				.map(x => x.replace(/:/g, ''));
 
 			return packEmojis(db!.emojis.concat(rs), host)
 				.catch(e => {
 					console.warn(e);
 					return [];
 				});
-			}
 		} else {
 			return [];
 		}
@@ -367,6 +365,7 @@ export const pack = async (
 
 		return renote ? `${renote._id}` : null;
 	};
+
 	const nodes = db.text ? parseFull(db.text) : [];
 
 	// 互換性のため。(古いMisskeyではNoteにemojisが無い)

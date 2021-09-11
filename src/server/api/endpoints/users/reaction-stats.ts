@@ -20,6 +20,7 @@ export const meta = {
 				'en-US': 'target'
 			}
 		},
+
 		userId: {
 			validator: $.type(ID),
 			transform: transform,
@@ -30,27 +31,24 @@ export const meta = {
 		},
 
 		limit: {
-			validator: $.optional.either($.optional.num.range(1, 1000), $.str.pipe(v => 1 <= Number(v) && Number(v) <= 1000)),
+			validator: $.optional.num.range(1, 1000),
 			default: 20,
-			transform: (v: any) => JSON.parse(v),
 			desc: {
 				'ja-JP': '取得数'
 			}
 		},
 
 		days: {
-			validator: $.optional.either($.optional.num.range(1, 30), $.str.pipe(v => 1 <= Number(v) && Number(v) <= 30)),
+			validator: $.optional.num.range(1, 30),
 			default: 30,
-			transform: (v: any) => JSON.parse(v),
 			desc: {
 				'ja-JP': '集計期間 (日)'
 			}
 		},
 
 		offset: {
-			validator: $.optional.either($.optional.num.min(0), $.str.pipe(v => 0 <= Number(v))),
+			validator: $.optional.num.min(0),
 			default: 0,
-			transform: (v: any) => JSON.parse(v),
 			desc: {
 				'ja-JP': 'オフセット'
 			}
@@ -59,7 +57,7 @@ export const meta = {
 
 	requireCredential: false,
 	allowGet: true,
-	cacheSec: 3600*3,
+	cacheSec: 3600 * 3,
 };
 
 type ReactionStat = {

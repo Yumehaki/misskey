@@ -1073,6 +1073,7 @@ describe('parse', () => {
 				]);
 			});
 		});
+
 		it('mathInline', () => {
 			const fomula = 'x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}';
 			const content = `\\(${fomula}\\)`;

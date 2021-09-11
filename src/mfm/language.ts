@@ -3,7 +3,7 @@ import { createMfmNode, urlRegex } from './utils';
 import { Predicate } from '../prelude/relation';
 import parseAcct from '../misc/acct/parse';
 import { toUnicode } from 'punycode/';
-import { emojiRegex, vendorEmojiRegex, localEmojiRegex } from '../misc/emoji-regex';
+import { emojiRegex, vendorEmojiRegex } from '../misc/emoji-regex';
 import * as tinycolor from 'tinycolor2';
 
 export function removeOrphanedBrackets(s: string): string {
@@ -65,7 +65,6 @@ export const mfmLanguage = P.createLanguage({
 		r.hashtag,
 		r.url,
 		r.link,
-		r.fn,
 		r.emoji,
 
 		// 装飾はここに追加
@@ -80,6 +79,7 @@ export const mfmLanguage = P.createLanguage({
 		r.x4,
 		r.x5,
 		r.x6,
+
 		r.fn,
 
 		r.text
@@ -248,12 +248,12 @@ export const mfmLanguage = P.createLanguage({
 	shake: r => P.regexp(/<shake>(.+?)<\/shake>/, 1).map(x => createMfmNode('shake', {}, r.inline.atLeast(1).tryParse(x))),
 	sup: r => P.regexp(/<sup>(.+?)<\/sup>/, 1).map(x => createMfmNode('sup', {}, r.inline.atLeast(1).tryParse(x))),
 	sub: r => P.regexp(/<sub>(.+?)<\/sub>/, 1).map(x => createMfmNode('sub', {}, r.inline.atLeast(1).tryParse(x))),
+	rgbshift: r => P.regexp(/<rgbshift>(.+?)<\/rgbshift>/, 1).map(x => createMfmNode('rgbshift', {}, r.inline.atLeast(1).tryParse(x))),
 	x2: r => P.regexp(/<x2>(.+?)<\/x2>/, 1).map(x => createMfmNode('x2', {}, r.inline.atLeast(1).tryParse(x))),
 	x3: r => P.regexp(/<x3>(.+?)<\/x3>/, 1).map(x => createMfmNode('x3', {}, r.inline.atLeast(1).tryParse(x))),
 	x4: r => P.regexp(/<x4>(.+?)<\/x4>/, 1).map(x => createMfmNode('x4', {}, r.inline.atLeast(1).tryParse(x))),
 	x5: r => P.regexp(/<x5>(.+?)<\/x5>/, 1).map(x => createMfmNode('x5', {}, r.inline.atLeast(1).tryParse(x))),
 	x6: r => P.regexp(/<x6>(.+?)<\/x6>/, 1).map(x => createMfmNode('x6', {}, r.inline.atLeast(1).tryParse(x))),
-	rgbshift: r => P.regexp(/<rgbshift>(.+?)<\/rgbshift>/, 1).map(x => createMfmNode('rgbshift', {}, r.inline.atLeast(1).tryParse(x))),
 
 	center: r => r.startOfLine.then(P.regexp(/<center>([\s\S]+?)<\/center>/, 1).map(x => createMfmNode('center', {}, r.inline.atLeast(1).tryParse(x)))),
 	inlineCode: () => P.regexp(/`([^´\n]+?)`/, 1).map(x => createMfmNode('inlineCode', { code: x })),
@@ -264,9 +264,9 @@ export const mfmLanguage = P.createLanguage({
 			const text = input.substr(i);
 			// eslint-disable-next-line no-useless-escape
 			const match = text.match(/^@\w([\w-]*\w)?(?:@[\w\.\-]+\w)?/);
+			if (!match) return P.makeFailure(i, 'not a mention');
 			// @ の前に何かあればハッシュタグ扱いしない
 			if (input[i - 1]?.match(/[^\s\u200b]/)) return P.makeFailure(i, 'not a mention');
-			if (!match) return P.makeFailure(i, 'not a mention');
 			return P.makeSuccess(i + match[0].length, match[0]);
 		}).map(x => {
 			const { username, host } = parseAcct(x.substr(1));
@@ -290,6 +290,7 @@ export const mfmLanguage = P.createLanguage({
 
 		// # の前に何かあればハッシュタグ扱いしない
 		if (input[i - 1]?.match(/[^\s\u200b]/)) return P.makeFailure(i, 'not a hashtag');
+
 		return P.makeSuccess(i + ('#' + hashtag).length, createMfmNode('hashtag', { hashtag: hashtag }));
 	}),
 	url: () => {
@@ -328,33 +329,36 @@ export const mfmLanguage = P.createLanguage({
 	emoji: () => {
 		const name = P.regexp(/:(@?[\w-]+(?:@[\w.-]+)?):/i, 1).map(x => createMfmNode('emoji', { name: x }));
 		const vcode = P.regexp(vendorEmojiRegex).map(x => createMfmNode('emoji', { emoji: x, vendor: true }));
-		const lcode = P.regexp(localEmojiRegex).map(x => createMfmNode('emoji', { emoji: x, local: true }));
 		const code = P.regexp(emojiRegex).map(x => createMfmNode('emoji', { emoji: x }));
-		return P.alt(name, lcode, vcode, code);
+		return P.alt(name, vcode, code);
 	},
 	fn: r => {
-		return P.seqObj(
-			P.string('['), ['fn', P.regexp(/[^\s\n\[\]]+/)] as any, P.string(' '), P.optWhitespace, ['text', P.regexp(/[^\n\[\]]+/)] as any, P.string(']'),
-		).map((x: any) => {
-			let name = x.fn;
-			const args = {} as any;
-			const separator = x.fn.indexOf('.');
-			if (separator > -1) {
-				name = x.fn.substr(0, separator);
-				for (const arg of x.fn.substr(separator + 1).split(',')) {
-					const kv = arg.split('=');
-					if (kv.length === 1) {
-						args[kv[0]] = true;
-					} else {
-						args[kv[0]] = kv[1];
-					}
+		return P((input, i) => {
+			const text = input.substr(i);
+			const match = text.match(/^\[([0-9a-z]+)(?:\.([0-9a-z.,=]+))?\s+([^\n\[\]]+)\]/);
+			if (!match) return P.makeFailure(i, 'not a fn');
+
+			const name = match[1];
+			const argsPart = match[2];
+			const content = match[3];
+
+			if (!['tada', 'jelly', 'twitch', 'shake', 'spin', 'jump', 'bounce', 'flip', 'rgbshift', 'x2', 'x3', 'x4', 'x5', 'x6', 'font', 'blur'].includes(name)) {
+				return P.makeFailure(i, 'unknown fn name');
+			}
+
+			const args: Record<string, boolean | string> = {};
+			for (const arg of argsPart?.split(',') || []) {
+				const kv = arg.split('=');
+				if (kv[0] == '__proto__') return P.makeFailure(i, 'prototype pollution');
+				if (kv.length === 1) {
+					args[kv[0]] = true;
+				} else {
+					args[kv[0]] = kv[1];
 				}
 			}
-			return createMfmNode('fn', {
-				name,
-				args
-			}, r.inline.atLeast(1).tryParse(x.text));
-		});
+
+			return P.makeSuccess(i + match[0].length, { name, args, content });
+		}).map(x => createMfmNode('fn', { name: x.name, args: x.args }, r.inline.atLeast(1).tryParse(x.content)));
 	},
 	text: () => P.any.map(x => createMfmNode('text', { text: x }))
 });

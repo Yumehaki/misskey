@@ -59,14 +59,24 @@ export default Vue.component('misskey-flavored-markdown', {
 	render(createElement) {
 		if (this.text == null || this.text == '') return;
 
-		const ast = (this.basic ? parseBasic : this.plain ? this.extra ? parsePlainX : parsePlain : parseFull)(this.text);
+		const ast =
+			(this.plain
+				? (this.extra && this.$store.state.settings.enableDecoratedMfm)
+					? parsePlainX
+					: parsePlain
+				: (this.basic || !this.$store.state.settings.enableDecoratedMfm)
+					? parseBasic
+					: parseFull
+			)(this.text);
 
 		let bigCount = 0;
 		let motionCount = 0;
+
 		const validTime = (t: string | null | undefined) => {
 			if (t == null) return null;
 			return t.match(/^[0-9.]+s$/) ? t : null;
 		}
+
 		const genEl = (nodes: MfmNode[], inQuote?: string) => concat(nodes.map((node): VNode[] => {
 			switch (node.type) {
 				case 'text': {
@@ -141,7 +151,8 @@ export default Vue.component('misskey-flavored-markdown', {
 						}]
 					}, genEl(node.children, inQuote));
 				}
-case 'fn': {
+
+				case 'fn': {
 					// TODO: CSSを文字列で組み立てていくと node.props.args.~~~ 経由でCSSインジェクションできるのでよしなにやる
 					let style;
 					switch (node.props.name) {
@@ -389,6 +400,7 @@ case 'fn': {
 						style: !this.$store.state.settings.disableAnimatedMfm ? 'animation: mfm-rgbshift 2s linear infinite;' : ''
 					}, genEl(node.children));
 				}
+
 				case 'x2': {
 					return (createElement as any)('span', {
 						style: `font-size: 200%;`
@@ -406,7 +418,6 @@ case 'fn': {
 						style: `font-size: 400%;`
 					}, genEl(node.children));
 				}
-
 				case 'x5': {
 					return (createElement as any)('span', {
 						style: `font-size: 500%;`
@@ -550,6 +561,7 @@ case 'fn': {
 						}
 					})];
 				}
+
 				case 'mathInline': {
 					//const MkFormula = () => import('./formula.vue').then(m => m.default);
 					return [createElement(MkFormula, {

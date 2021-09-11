@@ -104,8 +104,8 @@ const angleDb: MfmDef[] = [
 	{ name: 'x2', head: '<x2>', tail: '</x2>', desc: '<x2>🍮</x2>' },
 	{ name: 'x3', head: '<x3>', tail: '</x3>', desc: '<x3>🍮</x3>' },
 	{ name: 'x4', head: '<x4>', tail: '</x4>', desc: '<x4>🍮</x4>' },
-	{ name: 'x5', head: '<x5>', tail: '</x5>', desc: '<x5>🍮</x5>' },
-	{ name: 'x6', head: '<x6>', tail: '</x6>', desc: '<x6>🍮</x6>' },
+	{ name: 'x3', head: '<x5>', tail: '</x5>', desc: '<x5>🍮</x5>' },
+	{ name: 'x4', head: '<x6>', tail: '</x6>', desc: '<x6>🍮</x6>' },
 
 	{ name: 'color', head: '<color red blue>', tail: '</color>' },
 
@@ -130,6 +130,32 @@ const angleDb: MfmDef[] = [
 	{ name: 'marquee reverse', head: '<marquee reverse>', tail: '</marquee>' },
 	{ name: 'marquee alternate', head: '<marquee alternate>', tail: '</marquee>' },
 	{ name: 'marquee slide', head: '<marquee slide>', tail: '</marquee>' },
+];
+
+const fnDb: MfmDef[] = [
+	{ name: 'jelly', head: '[jelly ', tail: ']', desc: '[jelly 🍮]' },
+	{ name: 'tada', head: '[tada ', tail: ']', desc: '[tada 🍮]' },
+	{ name: 'jump', head: '[jump ', tail: ']', desc: '[jump 🍮]' },
+	{ name: 'bounce', head: '[bounce ', tail: ']', desc: '[bounce 🍮]' },
+	{ name: 'shake', head: '[shake ', tail: ']', desc: '[shake 🍮]' },
+	{ name: 'twitch', head: '[twitch ', tail: ']', desc: '[twitch 🍮]' },
+
+	{ name: 'flip', head: '[flip ', tail: ']', desc: '[flip flip]' },
+	{ name: 'flip.v', head: '[flip.v ', tail: ']', desc: '[flip.v flip]' },
+	{ name: 'flip.v,h', head: '[flip.v,h ', tail: ']', desc: '[flip.v,h flip]' },
+
+	{ name: 'spin', head: '[spin ', tail: ']', desc: '[spin spin]' },
+	{ name: 'spin.x', head: '[spin.x ', tail: ']', desc: '[spin.x spin]' },
+	{ name: 'spin.y', head: '[spin.y ', tail: ']', desc: '[spin.y spin]' },
+
+	{ name: 'x2', head: '[x2 ', tail: ']', desc: '[x2 🍮]' },
+	{ name: 'x3', head: '[x3 ', tail: ']', desc: '[x3 🍮]' },
+	{ name: 'x4', head: '[x4 ', tail: ']', desc: '[x4 🍮]' },
+
+	{ name: 'blur', head: '[blur ', tail: ']', desc: '[blur 🍮]' },
+
+	{ name: 'font.serif', head: '[font.serif ', tail: ']', desc: '[font.serif serif]' },
+	{ name: 'font.monospace', head: '[font.monospace ', tail: ']', desc: '[font.monospace monospace]' },
 ];
 
 export default Vue.extend({
@@ -269,8 +295,17 @@ export default Vue.extend({
 					return;
 				}
 
-				const matched : any[]= [];
+				const matched: any[] = [];
 				const max = 30;
+
+				// 完全一致
+				if (matched.length < max) {
+					this.emojiDb.some(x => {
+						if (x.name === this.q && !matched.some(y => y.emoji == x.emoji)) matched.push(x);
+						return matched.length == max;
+					});
+				}
+
 				// カスタム絵文字マッチ
 				if (matched.length < max) {
 					this.emojiDb.some(x => {
@@ -278,6 +313,7 @@ export default Vue.extend({
 						return matched.length == max;
 					});
 				}
+
 				if (matched.length < max) {
 					this.emojiDb.some(x => {
 						if (x.name.startsWith(this.q) && !x.aliasOf && !matched.some(y => y.emoji == x.emoji)) matched.push(x);
@@ -285,16 +321,13 @@ export default Vue.extend({
 					});
 				}
 
-				this.emojiDb.some(x => {
-					if (x.name.startsWith(this.q) && !x.aliasOf && !matched.some(y => y.emoji == x.emoji)) matched.push(x);
-					return matched.length == max;
-				});
 				if (matched.length < max) {
 					this.emojiDb.some(x => {
 						if (x.name.startsWith(this.q) && !matched.some(y => y.emoji == x.emoji)) matched.push(x);
 						return matched.length == max;
 					});
 				}
+
 				if (matched.length < max) {
 					this.emojiDb.some(x => {
 						if (x.name.includes(this.q) && !matched.some(y => y.emoji == x.emoji)) matched.push(x);
@@ -303,10 +336,14 @@ export default Vue.extend({
 				}
 
 				this.emojis = matched;
-			} else if (this.type === 'mfm') {
+			} else if (this.type === 'mfm' && this.$store.state.settings.enableDecoratedMfm) {
 				if (this.q.startsWith('<')) {
 					const name = this.q.substr(1);
 					const db = angleDb.filter(x => x.name.startsWith(name));
+					this.mfms = db;
+				} else if (this.q.startsWith('[')) {
+					const name = this.q.substr(1);
+					const db = fnDb.filter(x => x.name.startsWith(name));
 					this.mfms = db;
 				}
 			}

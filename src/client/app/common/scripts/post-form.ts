@@ -137,6 +137,7 @@ export default (opts) => ({
 			localStorage.setItem('hashtags', JSON.stringify([]));
 		}
 	},
+
 	methods: {
 		watch() {
 			this.$watch('text', () => this.saveDraft());
@@ -177,6 +178,7 @@ export default (opts) => ({
 				this.$notify(driveFile.error.message);
 				return;
 			}
+			if (this.files.some(x => x.id === driveFile.id)) return;
 			this.files.push(driveFile);
 			this.$emit('change-attached-files', this.files);
 		},
