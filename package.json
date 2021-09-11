@@ -1,7 +1,7 @@
 {
 	"name": "misskey",
 	"author": "@esorabi <aneqt@yumehaki.com> , @konoha <konoha@yumehaki.com> | <admin@yumehaki.com>",
-	"version": "10.103.0.0-ypf",
+	"version": "10.103.0.1-ypf",
 	"codename": "ypf",
 	"repository": {
 		"type": "git",
