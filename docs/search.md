@@ -22,7 +22,6 @@ apt install -y mecab mecab-ipadic-utf8
 ```
 mecabSearch:
   mecabBin: mecab
-  mecabDic: /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd
 ```
 
 ## Dockerの場合
@@ -31,4 +30,4 @@ Dockerの場合はコンテナ内にMeCabがインストールされている必
 
 Forkなどして、Dockerfileを以下のファイルで置き換えてconfigで上記パスを指定すれば使えるかもしれません。
 
-https://github.com/mei23/misskey/blob/mei-m544/examples/Dockerfile.mecab
+https://github.com/mei23/misskey/blob/mei-m544/docs/examples/Dockerfile.mecab
