@@ -5,7 +5,6 @@ import { serverLogger } from '..';
 import Emoji from '../../models/emoji';
 import { detectType, calcHash } from '../../misc/get-file-info';
 import { downloadUrl } from '../../misc/download-url';
-import { StatusError } from '../../misc/fetch';
 
 export default async function(ctx: Router.RouterContext) {
 	const emoji = await Emoji.findOne({
@@ -59,12 +58,12 @@ export default async function(ctx: Router.RouterContext) {
 			});
 		};
 
-		if (e instanceof StatusError && e.isClientError) {
+		if (typeof e == 'number' && e >= 400 && e < 500) {
 			// 4xx
 			defered();
-			ctx.status = e.statusCode;
+			ctx.status = e;
 			ctx.set('Cache-Control', 'max-age=86400');
-		} else if (typeof e.statusCode === 'number') {
+		} else if (typeof e == 'number') {
 			// other status code
 			ctx.status = 500;
 			ctx.set('Cache-Control', 'max-age=300');

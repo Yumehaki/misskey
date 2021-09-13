@@ -28,7 +28,6 @@ import MessagingMessage from '../../../models/messaging-message';
 import DbResolver from '../db-resolver';
 import { tryStockEmoji } from '../../../services/emoji-store';
 import { parseDate, parseDateWithLimit } from '../misc/date';
-import { StatusError } from '../../../misc/fetch';
 
 const logger = apLogger;
 
@@ -183,7 +182,7 @@ export async function createNote(value: string | IObject, resolver?: Resolver | 
 				}
 			} catch (e) {
 				return {
-					status: (e instanceof StatusError && e.isClientError) ? 'permerror' : 'temperror'
+					status: e.statusCode >= 400 && e.statusCode < 500 ? 'permerror' : 'temperror'
 				};
 			}
 		};

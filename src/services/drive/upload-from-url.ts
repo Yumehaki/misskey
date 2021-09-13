@@ -1,3 +1,5 @@
+import { URL } from 'url';
+
 import { IDriveFile, validateFileName } from '../../models/drive-file';
 import { addFile } from './add-file';
 import { IUser } from '../../models/user';
@@ -22,10 +24,11 @@ export const uploadFromUrl = async (
 
 	// write content at URL to temp file
 	await downloadUrl(url, path);
+	const info = await downloadUrl(url, path);
 
 	let name: string | null = null;
 
-	name = new URL(url).pathname.split('/').pop() || null;
+	name = new URL(info.url).pathname.split('/').pop() || null;
 
 	if (name && !validateFileName(name)) {
 		name = null;

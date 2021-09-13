@@ -447,8 +447,6 @@ export async function pack(
 			return [];
 		}): [],
 
-		avoidSearchIndex: !!db.avoidSearchIndex,
-
 		...(opts.detail ? {
 			createdAt: toISODateOrNull(db.createdAt),
 			updatedAt: toISODateOrNull(db.updatedAt),
@@ -516,6 +514,7 @@ export async function pack(
 			carefulMassive: !!db.carefulMassive,
 			refuseFollow: !!db.refuseFollow,
 			autoAcceptFollowed: !!db.autoAcceptFollowed,
+			avoidSearchIndex: !!db.avoidSearchIndex,
 			isExplorable: !!db.isExplorable,
 			hideFollows: db.hideFollows || '',
 

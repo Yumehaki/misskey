@@ -1,13 +1,13 @@
 import * as fs from 'fs';
 import * as stream from 'stream';
 import * as util from 'util';
-import got, * as Got from 'got';
-import { httpAgent, httpsAgent, StatusError } from './fetch';
+import fetch from 'node-fetch';
+import { httpAgent, httpsAgent } from './fetch';
+import { AbortController } from 'abort-controller';
+import * as ContentDisposition from 'content-disposition';
 import config from '../config';
 import * as chalk from 'chalk';
 import Logger from '../services/logger';
-import * as IPCIDR from 'ip-cidr';
-const PrivateIp = require('private-ip');
 
 const pipeline = util.promisify(stream.pipeline);
 
@@ -16,72 +16,52 @@ export async function downloadUrl(url: string, path: string) {
 
 	logger.info(`Downloading ${chalk.cyan(url)} ...`);
 
-	const timeout = 30 * 1000;
-	const operationTimeout = 60 * 1000;
-	const maxSize = config.maxFileSize || 262144000;
+	const controller = new AbortController();
+	setTimeout(() => {
+		controller.abort();
+	}, 31 * 1000);
 
-	const req = got.stream(url, {
+	const response = await fetch(new URL(url).href, {
 		headers: {
 			'User-Agent': config.userAgent
 		},
-		timeout: {
-			lookup: timeout,
-			connect: timeout,
-			secureConnect: timeout,
-			socket: timeout,	// read timeout
-			response: timeout,
-			send: timeout,
-			request: operationTimeout,	// whole operation timeout
-		},
-		agent: {
-			http: httpAgent,
-			https: httpsAgent,
-		},
-		http2: false,	// default
-		retry: 0,
-	}).on('response', (res: Got.Response) => {
-		if ((process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') && !config.proxy && res.ip) {
-			if (isPrivateIp(res.ip)) {
-				logger.warn(`Blocked address: ${res.ip}`);
-				req.destroy();
-			}
-		}
-
-		const contentLength = res.headers['content-length'];
-		if (contentLength != null) {
-			const size = Number(contentLength);
-			if (size > maxSize) {
-				logger.warn(`maxSize exceeded (${size} > ${maxSize}) on response`);
-				req.destroy();
-			}
-		}
-	}).on('downloadProgress', (progress: Got.Progress) => {
-		if (progress.transferred > maxSize) {
-			logger.warn(`maxSize exceeded (${progress.transferred} > ${maxSize}) on downloadProgress`);
-			req.destroy();
-		}
+		timeout: 30 * 1000,
+		size: config.maxFileSize || 262144000,
+		signal: controller.signal,
+		agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent,
 	});
 
-	try {
-		await pipeline(req, fs.createWriteStream(path));
-	} catch (e) {
-		if (e instanceof Got.HTTPError) {
-			throw new StatusError(`${e.response.statusCode} ${e.response.statusMessage}`, e.response.statusCode, e.response.statusMessage);
-		} else {
-			throw e;
-		}
+	if (!response.ok) {
+		logger.error(`Got ${response.status} (${url})`);
+		throw response.status;
+	}
+
+	// Content-Lengthがあればとっておく
+	const contentLength = response.headers.get('content-length');
+	const expectedLength = contentLength != null ? Number(contentLength) : null;
+
+	await pipeline(response.body, fs.createWriteStream(path));
+
+	// 可能ならばサイズ比較
+	const actualLength = (await util.promisify(fs.stat)(path)).size;
+
+	if (response.headers.get('content-encoding') == null && expectedLength != null && expectedLength !== actualLength) {
+		throw `size error: expected: ${expectedLength}, but got ${actualLength}`;
 	}
 
 	logger.succ(`Download finished: ${chalk.cyan(url)}`);
-}
 
-function isPrivateIp(ip: string) {
-	for (const net of config.allowedPrivateNetworks || []) {
-		const cidr = new IPCIDR(net);
-		if (cidr.contains(ip)) {
-			return false;
+	let filename: string | null = null;
+	try {
+		const contentDisposition = response.headers.get('content-disposition');
+		if (contentDisposition) {
+			const cd = ContentDisposition.parse(contentDisposition);
+			if (cd.parameters?.filename) filename = cd.parameters.filename;
 		}
-	}
+	} catch { }
 
-	return PrivateIp(ip);
+	return {
+		filename,
+		url: response.url
+	};
 }

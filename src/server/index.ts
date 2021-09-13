@@ -114,7 +114,7 @@ export const startServer = () => {
 	require('./api/streaming')(server);
 
 	// Listen
-	server.listen(config.port, config.addr || undefined);
+	server.listen(config.port);
 
 	return server;
 };
@@ -126,7 +126,7 @@ export default () => new Promise(resolve => {
 	require('./api/streaming')(server);
 
 	// Listen
-	server.listen(config.port, config.addr || undefined, resolve);
+	server.listen(config.port, resolve);
 
 	//#region Network stats
 	let queue: any[] = [];
