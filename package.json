@@ -85,7 +85,7 @@
 		"@types/web-push": "3.3.2",
 		"@types/webpack": "5.28.0",
 		"@types/websocket": "1.0.4",
-		"@types/ws": "7.4.7",
+		"@types/ws": "8.5.4",
 		"abort-controller": "3.0.0",
 		"animejs": "3.2.1",
 		"apexcharts": "3.27.3",
@@ -224,7 +224,7 @@
 		"webpack": "5.47.1",
 		"webpack-cli": "4.7.2",
 		"websocket": "1.0.34",
-		"ws": "7.5.3",
+		"ws": "8.11.0",
 		"xev": "2.0.1",
 		"xmlbuilder": "15.1.1"
 	},
